@@ -58,6 +58,8 @@ export class DragScrollComponent implements OnDestroy, AfterViewInit, OnChanges,
 
   private _snapDuration = 500;
 
+  private _contentScale = 1;
+
   /**
    * Is the user currently pressing the element
    */
@@ -171,6 +173,16 @@ export class DragScrollComponent implements OnDestroy, AfterViewInit, OnChanges,
   get snapDuration() { return this._snapDuration; }
   set snapDuration(value: number) { this._snapDuration = value; }
 
+  @Input('content-scale')
+  get contentScale(): number {
+    return this._contentScale;
+  }
+  set contentScale(value: number) {
+    if(value) {
+      this._contentScale = value;
+    }
+  }
+
   constructor(
     private _elementRef: ElementRef,
     private _renderer: Renderer2,
@@ -207,7 +219,9 @@ export class DragScrollComponent implements OnDestroy, AfterViewInit, OnChanges,
     this.markElDimension();
 
     this._renderer.setStyle(this._contentRef.nativeElement, 'width', this.elWidth);
+    this._renderer.setStyle(this._contentRef.nativeElement, 'width', this._contentRef.nativeElement.width * this._contentScale);
     this._renderer.setStyle(this._contentRef.nativeElement, 'height', this.elHeight);
+    this._renderer.setStyle(this._contentRef.nativeElement, 'height', this._contentRef.nativeElement.height * this._contentScale);
 
     if (this.wrapper) {
       this.checkScrollbar();
